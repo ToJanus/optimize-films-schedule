@@ -154,6 +154,8 @@ def optimize_schedule(
     travel_times: TravelTimes,
     *,
     require_all_films: bool = False,
+    earliest_start: int | None = None,
+    latest_end: int | None = None,
 ) -> list[ScheduleOption]:
     """Return all feasible schedule variants sorted from best to worst."""
 
@@ -175,6 +177,10 @@ def optimize_schedule(
         for index in range(start_index, len(enriched)):
             candidate = enriched[index]
             if candidate.film.id in used_films:
+                continue
+            if earliest_start is not None and candidate.movie_starts_at < earliest_start:
+                continue
+            if latest_end is not None and candidate.movie_ends_at > latest_end:
                 continue
             if last and not _can_follow(last, candidate, travel_times):
                 continue

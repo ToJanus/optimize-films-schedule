@@ -2,9 +2,18 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
+from typing import Sequence
 
-from .optimizer import load_plan, optimize_schedule, option_to_dict, option_to_text
+from .optimizer import (
+    ScheduleOption,
+    load_plan,
+    optimize_schedule,
+    option_to_dict,
+    option_to_text,
+    parse_clock,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -17,11 +26,36 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Only show schedules that contain every distinct film from the input exactly once.",
     )
+    parser.add_argument(
+        "--earliest-start",
+        type=_parse_clock_argument,
+        help="Earliest movie start time in HH:MM format.",
+    )
+    parser.add_argument(
+        "--latest-end",
+        type=_parse_clock_argument,
+        help="Latest movie end time in HH:MM format.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help=(
+            "Save one aggregate result file and every single schedule option as a separate file "
+            "in a newly created sibling subdirectory."
+        ),
+    )
     return parser
 
 
 def main() -> None:
-    args = build_parser().parse_args()
+    parser = build_parser()
+    args = parser.parse_args()
+    if (
+        args.earliest_start is not None
+        and args.latest_end is not None
+        and args.earliest_start > args.latest_end
+    ):
+        parser.error("--earliest-start cannot be later than --latest-end.")
     data = json.loads(args.input.read_text(encoding="utf-8"))
     films, cinemas, screenings, priority_weights, travel_times = load_plan(data)
     options = optimize_schedule(
@@ -31,8 +65,15 @@ def main() -> None:
         priority_weights,
         travel_times,
         require_all_films=args.all_films,
+        earliest_start=args.earliest_start,
+        latest_end=args.latest_end,
     )
     selected = options if args.limit == 0 else options[: args.limit]
+
+    if args.output:
+        records_dir = save_options(selected, args.output, args.format)
+        print(f"Zapisano {len(selected)} terminarzy do {args.output} oraz do katalogu {records_dir}.")
+        return
 
     if args.format == "json":
         print(json.dumps([option_to_dict(option) for option in selected], ensure_ascii=False, indent=2))
@@ -44,6 +85,55 @@ def main() -> None:
 
     for ordinal, option in enumerate(selected, start=1):
         print(option_to_text(option, ordinal))
+
+
+def save_options(options: Sequence[ScheduleOption], output_path: Path, output_format: str) -> Path:
+    """Save an aggregate file and one file per schedule option."""
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    records_dir = output_path.with_name(f"{output_path.stem}_records")
+    records_dir.mkdir(parents=True, exist_ok=True)
+
+    if output_format == "json":
+        output_path.write_text(
+            json.dumps([option_to_dict(option) for option in options], ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        for ordinal, option in enumerate(options, start=1):
+            record_path = records_dir / f"{ordinal:03d}_{_slugify_option(option, ordinal)}.json"
+            record_path.write_text(
+                json.dumps(option_to_dict(option), ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+        return records_dir
+
+    if options:
+        text = "\n\n".join(option_to_text(option, ordinal) for ordinal, option in enumerate(options, start=1))
+    else:
+        text = "Brak możliwych terminarzy dla podanych ograniczeń."
+    output_path.write_text(f"{text}\n", encoding="utf-8")
+    for ordinal, option in enumerate(options, start=1):
+        record_path = records_dir / f"{ordinal:03d}_{_slugify_option(option, ordinal)}.txt"
+        record_path.write_text(f"{option_to_text(option, ordinal)}\n", encoding="utf-8")
+    return records_dir
+
+
+def _parse_clock_argument(value: str) -> int:
+    try:
+        return parse_clock(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("Expected time in HH:MM format.") from error
+
+
+def _slugify_option(option: ScheduleOption, ordinal: int) -> str:
+    if not option.screenings:
+        return f"option_{ordinal:03d}"
+    starts_at = option.screenings[0].movie_starts_at
+    ends_at = option.screenings[-1].movie_ends_at
+    title = option.screenings[0].film.title
+    raw = f"{starts_at:04d}_{ends_at:04d}_{title}"
+    slug = re.sub(r"[^a-zA-Z0-9_-]+", "-", raw).strip("-").lower()
+    return slug or f"option_{ordinal:03d}"
 
 
 if __name__ == "__main__":

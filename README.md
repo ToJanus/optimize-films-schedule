@@ -40,6 +40,18 @@ Jeśli chcesz pokazać tylko warianty, które zawierają każdy zdefiniowany fil
 python -m film_schedule.cli examples/sample_day.json --all-films
 ```
 
+Możesz ograniczyć okno oglądania, podając najwcześniejszy start filmu i najpóźniejszy koniec filmu w formacie `HH:MM`:
+
+```bash
+python -m film_schedule.cli examples/sample_day.json --earliest-start 10:00 --latest-end 23:30
+```
+
+Wyniki możesz zapisać do pliku opcją `--output`. Program zapisze jeden zbiorczy plik w wybranym formacie oraz utworzy obok niego podkatalog `<nazwa_pliku>_records`, w którym każdy pojedynczy terminarz trafi do osobnego pliku:
+
+```bash
+python -m film_schedule.cli examples/sample_day.json --format json --limit 10 --output results/day.json
+```
+
 ## Sortowanie wyników
 
 Wyniki są sortowane kolejno po:
