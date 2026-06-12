@@ -98,3 +98,34 @@ def test_undefined_priority_is_reported() -> None:
         assert "undefined priorities" in str(error)
     else:
         raise AssertionError("Expected ValueError")
+
+
+def test_optimizer_filters_by_earliest_start_and_latest_end() -> None:
+    data = {
+        "priorities": {"same": 1},
+        "cinemas": [{"id": "a", "name": "Kino A"}],
+        "films": [
+            {"id": "early", "title": "Early", "duration_minutes": 50, "priority": "same"},
+            {"id": "middle", "title": "Middle", "duration_minutes": 50, "priority": "same"},
+            {"id": "late", "title": "Late", "duration_minutes": 90, "priority": "same"},
+        ],
+        "screenings": [
+            {"id": "early", "film_id": "early", "cinema_id": "a", "starts_at": "08:00"},
+            {"id": "middle", "film_id": "middle", "cinema_id": "a", "starts_at": "10:00"},
+            {"id": "late", "film_id": "late", "cinema_id": "a", "starts_at": "21:00"},
+        ],
+    }
+
+    films, cinemas, screenings, priorities, travel_times = load_plan(data)
+    options = optimize_schedule(
+        films,
+        cinemas,
+        screenings,
+        priorities,
+        travel_times,
+        earliest_start=9 * 60,
+        latest_end=22 * 60,
+    )
+
+    assert options
+    assert {item.screening.id for option in options for item in option.screenings} == {"middle"}
