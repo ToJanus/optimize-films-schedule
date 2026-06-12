@@ -2,7 +2,7 @@
 name = "optimize-films-schedule"
 version = "0.1.0"
 description = "CLI optimizer for one-day cinema movie schedules."
-requires-python = ">=3.11"
+requires-python = ">=3.9"
 readme = "README.md"
 
 [project.scripts]
