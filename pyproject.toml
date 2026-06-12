@@ -1,0 +1,13 @@
+[project]
+name = "optimize-films-schedule"
+version = "0.1.0"
+description = "CLI optimizer for one-day cinema movie schedules."
+requires-python = ">=3.11"
+readme = "README.md"
+
+[project.scripts]
+film-schedule = "film_schedule.cli:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
