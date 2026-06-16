@@ -17,8 +17,8 @@ def test_save_options_writes_aggregate_and_each_option_file(tmp_path) -> None:
             {"id": "s2", "film_id": "f2", "cinema_id": "a", "starts_at": "12:00"},
         ],
     }
-    films, cinemas, screenings, priorities, travel_times = load_plan(data)
-    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times)[:2]
+    films, cinemas, screenings, priorities, travel_times, constraints = load_plan(data)
+    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times, constraints)[:2]
 
     output_path = tmp_path / "results.json"
     records_dir = save_options(options, output_path, "json")
