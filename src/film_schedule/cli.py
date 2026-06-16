@@ -57,13 +57,14 @@ def main() -> None:
     ):
         parser.error("--earliest-start cannot be later than --latest-end.")
     data = json.loads(args.input.read_text(encoding="utf-8"))
-    films, cinemas, screenings, priority_weights, travel_times = load_plan(data)
+    films, cinemas, screenings, priority_weights, travel_times, constraints = load_plan(data)
     options = optimize_schedule(
         films,
         cinemas,
         screenings,
         priority_weights,
         travel_times,
+        constraints,
         require_all_films=args.all_films,
         earliest_start=args.earliest_start,
         latest_end=args.latest_end,

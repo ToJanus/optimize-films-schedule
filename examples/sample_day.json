@@ -9,29 +9,127 @@
     "margin_after_minutes": 10
   },
   "cinemas": [
-    {"id": "kino-a", "name": "Kino A", "ads_minutes": 15},
-    {"id": "kino-b", "name": "Kino B", "ads_minutes": 20},
-    {"id": "kino-c", "name": "Kino C", "ads_minutes": 10}
+    {
+      "id": "kino-a",
+      "name": "Kino A",
+      "ads_minutes": 15,
+      "address": "ul. Kinowa 1, Warszawa"
+    },
+    {
+      "id": "kino-b",
+      "name": "Kino B",
+      "ads_minutes": 20,
+      "address": "ul. Filmowa 2, Warszawa"
+    },
+    {
+      "id": "kino-c",
+      "name": "Kino C",
+      "ads_minutes": 10,
+      "address": "ul. Popcornowa 3, Warszawa"
+    }
   ],
   "films": [
-    {"id": "film-1", "title": "Film 1", "duration_minutes": 110, "priority": "must-see"},
-    {"id": "film-2", "title": "Film 2", "duration_minutes": 95, "priority": "want"},
-    {"id": "film-3", "title": "Film 3", "duration_minutes": 120, "priority": "must-see"},
-    {"id": "film-4", "title": "Film 4", "duration_minutes": 105, "priority": "optional"}
+    {
+      "id": "film-1",
+      "title": "Film 1",
+      "duration_minutes": 110,
+      "priority": "must-see"
+    },
+    {
+      "id": "film-2",
+      "title": "Film 2",
+      "duration_minutes": 95,
+      "priority": "want"
+    },
+    {
+      "id": "film-3",
+      "title": "Film 3",
+      "duration_minutes": 120,
+      "priority": "must-see"
+    },
+    {
+      "id": "film-4",
+      "title": "Film 4",
+      "duration_minutes": 105,
+      "priority": "optional"
+    }
   ],
   "screenings": [
-    {"id": "s1", "film_id": "film-1", "cinema_id": "kino-a", "starts_at": "10:00"},
-    {"id": "s2", "film_id": "film-2", "cinema_id": "kino-b", "starts_at": "13:40"},
-    {"id": "s3", "film_id": "film-3", "cinema_id": "kino-a", "starts_at": "17:00"},
-    {"id": "s4", "film_id": "film-4", "cinema_id": "kino-c", "starts_at": "21:20"},
-    {"id": "s5", "film_id": "film-2", "cinema_id": "kino-a", "starts_at": "12:50", "margin_after_minutes": 5}
+    {
+      "id": "s1",
+      "film_id": "film-1",
+      "cinema_id": "kino-a",
+      "starts_at": "10:00"
+    },
+    {
+      "id": "s2",
+      "film_id": "film-2",
+      "cinema_id": "kino-b",
+      "starts_at": "13:40"
+    },
+    {
+      "id": "s3",
+      "film_id": "film-3",
+      "cinema_id": "kino-a",
+      "starts_at": "17:00"
+    },
+    {
+      "id": "s4",
+      "film_id": "film-4",
+      "cinema_id": "kino-c",
+      "starts_at": "21:20"
+    },
+    {
+      "id": "s5",
+      "film_id": "film-2",
+      "cinema_id": "kino-a",
+      "starts_at": "12:50",
+      "margin_after_minutes": 5
+    }
   ],
   "travel_times": {
     "default_minutes": 25,
     "times": {
-      "kino-a": {"kino-b": 20, "kino-c": 35},
-      "kino-b": {"kino-a": 20, "kino-c": 15},
-      "kino-c": {"kino-a": 35, "kino-b": 15}
+      "kino-a": {
+        "kino-b": 20,
+        "kino-c": 35,
+        "dom": 20
+      },
+      "kino-b": {
+        "kino-a": 20,
+        "kino-c": 15,
+        "dom": 25
+      },
+      "kino-c": {
+        "kino-a": 35,
+        "kino-b": 15,
+        "dom": 30
+      },
+      "dom": {
+        "kino-a": 20,
+        "kino-b": 25,
+        "kino-c": 30
+      }
     }
+  },
+  "places": [
+    {
+      "id": "dom",
+      "name": "Dom",
+      "address": "ul. Domowa 1, Warszawa"
+    }
+  ],
+  "constraints": {
+    "required_films": [
+      "film-3"
+    ],
+    "required_film_cinemas": [
+      {
+        "film_id": "film-4",
+        "cinema_id": "kino-c"
+      }
+    ],
+    "start_location_id": "dom",
+    "end_location_id": "dom"
   }
 }

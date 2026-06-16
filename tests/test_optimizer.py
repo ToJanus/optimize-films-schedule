@@ -23,8 +23,8 @@ def test_optimizer_finds_full_best_schedule_with_ads_travel_and_margins() -> Non
         "travel_times": {"times": {"a": {"b": 20}, "b": {"a": 20}}},
     }
 
-    films, cinemas, screenings, priorities, travel_times = load_plan(data)
-    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times, require_all_films=True)
+    films, cinemas, screenings, priorities, travel_times, constraints = load_plan(data)
+    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times, constraints, require_all_films=True)
 
     assert len(options) == 1
     assert [item.screening.id for item in options[0].screenings] == ["s1", "s2", "s3"]
@@ -48,8 +48,8 @@ def test_optimizer_sorts_higher_priority_subset_before_longer_low_priority_plan(
         ],
     }
 
-    films, cinemas, screenings, priorities, travel_times = load_plan(data)
-    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times)
+    films, cinemas, screenings, priorities, travel_times, constraints = load_plan(data)
+    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times, constraints)
 
     assert options[0].score == 102
     assert [item.film.id for item in options[0].screenings] == ["low1", "low2", "important"]
@@ -76,8 +76,8 @@ def test_margin_before_is_counted_from_movie_start_after_ads() -> None:
         ],
     }
 
-    films, cinemas, screenings, priorities, travel_times = load_plan(data)
-    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times, require_all_films=True)
+    films, cinemas, screenings, priorities, travel_times, constraints = load_plan(data)
+    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times, constraints, require_all_films=True)
 
     assert len(options) == 1
     assert [item.screening.id for item in options[0].screenings] == ["first", "second"]
@@ -116,16 +116,71 @@ def test_optimizer_filters_by_earliest_start_and_latest_end() -> None:
         ],
     }
 
-    films, cinemas, screenings, priorities, travel_times = load_plan(data)
+    films, cinemas, screenings, priorities, travel_times, constraints = load_plan(data)
     options = optimize_schedule(
         films,
         cinemas,
         screenings,
         priorities,
         travel_times,
+        constraints,
         earliest_start=9 * 60,
         latest_end=22 * 60,
     )
 
     assert options
     assert {item.screening.id for option in options for item in option.screenings} == {"middle"}
+
+
+def test_required_films_are_preferred_over_priority_when_feasible() -> None:
+    data = {
+        "priorities": {"high": 100, "low": 1},
+        "cinemas": [{"id": "a", "name": "Kino A"}],
+        "films": [
+            {"id": "important", "title": "Important", "duration_minutes": 60, "priority": "high"},
+            {"id": "required", "title": "Required", "duration_minutes": 60, "priority": "low"},
+        ],
+        "screenings": [
+            {"id": "important", "film_id": "important", "cinema_id": "a", "starts_at": "10:00"},
+            {"id": "required", "film_id": "required", "cinema_id": "a", "starts_at": "10:30"},
+        ],
+        "constraints": {"required_films": ["required"]},
+    }
+
+    films, cinemas, screenings, priorities, travel_times, constraints = load_plan(data)
+    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times, constraints)
+
+    assert [item.film.id for item in options[0].screenings] == ["required"]
+    assert options[0].satisfied_required_films == ("required",)
+
+
+def test_required_film_cinema_pair_and_start_end_locations_are_used() -> None:
+    data = {
+        "priorities": {"same": 1},
+        "places": [{"id": "home", "name": "Dom", "address": "ul. Domowa 1"}],
+        "cinemas": [
+            {"id": "a", "name": "Kino A", "address": "ul. Kinowa 1"},
+            {"id": "b", "name": "Kino B", "address": "ul. Filmowa 2"},
+        ],
+        "films": [{"id": "film", "title": "Film", "duration_minutes": 60, "priority": "same"}],
+        "screenings": [
+            {"id": "too-early", "film_id": "film", "cinema_id": "a", "starts_at": "00:05"},
+            {"id": "wanted", "film_id": "film", "cinema_id": "b", "starts_at": "10:00"},
+        ],
+        "constraints": {
+            "required_film_cinemas": [{"film_id": "film", "cinema_id": "b"}],
+            "start_location_id": "home",
+            "end_location_id": "home",
+        },
+        "travel_times": {
+            "default_minutes": 0,
+            "times": {"home": {"a": 30, "b": 20}, "b": {"home": 25}},
+        },
+    }
+
+    films, cinemas, screenings, priorities, travel_times, constraints = load_plan(data)
+    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times, constraints)
+
+    assert [item.screening.id for item in options[0].screenings] == ["wanted"]
+    assert options[0].total_travel_minutes == 45
+    assert options[0].screenings[0].cinema.address == "ul. Filmowa 2"
