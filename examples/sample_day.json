@@ -13,19 +13,25 @@
       "id": "kino-a",
       "name": "Kino A",
       "ads_minutes": 15,
-      "address": "ul. Kinowa 1, Warszawa"
+      "address": "ul. Kinowa 1, Warszawa",
+      "lat": 52.2297,
+      "lon": 21.0122
     },
     {
       "id": "kino-b",
       "name": "Kino B",
       "ads_minutes": 20,
-      "address": "ul. Filmowa 2, Warszawa"
+      "address": "ul. Filmowa 2, Warszawa",
+      "lat": 52.24,
+      "lon": 21.02
     },
     {
       "id": "kino-c",
       "name": "Kino C",
       "ads_minutes": 10,
-      "address": "ul. Popcornowa 3, Warszawa"
+      "address": "ul. Popcornowa 3, Warszawa",
+      "lat": 52.22,
+      "lon": 21.0
     }
   ],
   "films": [
@@ -87,36 +93,13 @@
       "margin_after_minutes": 5
     }
   ],
-  "travel_times": {
-    "default_minutes": 25,
-    "times": {
-      "kino-a": {
-        "kino-b": 20,
-        "kino-c": 35,
-        "dom": 20
-      },
-      "kino-b": {
-        "kino-a": 20,
-        "kino-c": 15,
-        "dom": 25
-      },
-      "kino-c": {
-        "kino-a": 35,
-        "kino-b": 15,
-        "dom": 30
-      },
-      "dom": {
-        "kino-a": 20,
-        "kino-b": 25,
-        "kino-c": 30
-      }
-    }
-  },
   "places": [
     {
       "id": "dom",
       "name": "Dom",
-      "address": "ul. Domowa 1, Warszawa"
+      "address": "ul. Domowa 1, Warszawa",
+      "lat": 52.23,
+      "lon": 21.01
     }
   ],
   "constraints": {
@@ -131,5 +114,13 @@
     ],
     "start_location_id": "dom",
     "end_location_id": "dom"
+  },
+  "travel_times_file": "sample_travel_times.json",
+  "optimization_settings": {
+    "sort_by_risk": false,
+    "risk": {
+      "warning_threshold_minutes": 10,
+      "warning_threshold_ratio": 1.5
+    }
   }
 }
