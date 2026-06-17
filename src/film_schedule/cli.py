@@ -37,6 +37,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="Latest movie end time in HH:MM format.",
     )
     parser.add_argument(
+        "--travel-times",
+        type=Path,
+        help="Override or provide an external travel_times JSON file.",
+    )
+    parser.add_argument(
+        "--sort-by-risk",
+        action="store_true",
+        help="Prefer lower-risk schedules after requirements, score and film count.",
+    )
+    parser.add_argument(
+        "--validate-routes",
+        type=int,
+        default=0,
+        metavar="N",
+        help="Print route legs from the top N optimized schedules for optional live/API validation.",
+    )
+    parser.add_argument(
         "--output",
         type=Path,
         help=(
@@ -57,7 +74,11 @@ def main() -> None:
     ):
         parser.error("--earliest-start cannot be later than --latest-end.")
     data = json.loads(args.input.read_text(encoding="utf-8"))
-    films, cinemas, screenings, priority_weights, travel_times, constraints = load_plan(data)
+    if args.travel_times:
+        data["travel_times_file"] = str(args.travel_times)
+    if args.sort_by_risk:
+        data.setdefault("optimization_settings", {})["sort_by_risk"] = True
+    films, cinemas, screenings, priority_weights, travel_times, constraints, settings, _locations = load_plan(data, args.input.parent)
     options = optimize_schedule(
         films,
         cinemas,
@@ -68,8 +89,13 @@ def main() -> None:
         require_all_films=args.all_films,
         earliest_start=args.earliest_start,
         latest_end=args.latest_end,
+        optimization_settings=settings,
     )
     selected = options if args.limit == 0 else options[: args.limit]
+
+    if args.validate_routes:
+        print(json.dumps(_route_validation_payload(selected[: args.validate_routes]), ensure_ascii=False, indent=2))
+        return
 
     if args.output:
         records_dir = save_options(selected, args.output, args.format)
@@ -86,6 +112,18 @@ def main() -> None:
 
     for ordinal, option in enumerate(selected, start=1):
         print(option_to_text(option, ordinal))
+
+
+def _route_validation_payload(options: Sequence[ScheduleOption]) -> list[dict[str, object]]:
+    return [
+        {
+            "option": ordinal,
+            "score": option.score,
+            "risk_score": option.risk_score,
+            "routes": option_to_dict(option)["routes"],
+        }
+        for ordinal, option in enumerate(options, start=1)
+    ]
 
 
 def save_options(options: Sequence[ScheduleOption], output_path: Path, output_format: str) -> Path:

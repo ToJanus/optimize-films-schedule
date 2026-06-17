@@ -1,0 +1,886 @@
+{
+  "generated_at": "2026-06-17T00:00:00+00:00",
+  "provider": "sample",
+  "default_minutes": 25,
+  "profiles": [
+    {
+      "id": "morning",
+      "start": "06:00",
+      "end": "11:00"
+    },
+    {
+      "id": "midday",
+      "start": "11:00",
+      "end": "15:00"
+    },
+    {
+      "id": "afternoon",
+      "start": "15:00",
+      "end": "19:00"
+    },
+    {
+      "id": "evening",
+      "start": "19:00",
+      "end": "23:00"
+    },
+    {
+      "id": "night",
+      "start": "23:00",
+      "end": "06:00"
+    }
+  ],
+  "times": {
+    "kino-a": {
+      "kino-b": {
+        "minutes": 20,
+        "distance_meters": 14000,
+        "no_traffic_minutes": 17,
+        "historic_traffic_minutes": 20,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      },
+      "kino-c": {
+        "minutes": 35,
+        "distance_meters": 24500,
+        "no_traffic_minutes": 32,
+        "historic_traffic_minutes": 35,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      },
+      "dom": {
+        "minutes": 20,
+        "distance_meters": 14000,
+        "no_traffic_minutes": 17,
+        "historic_traffic_minutes": 20,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      }
+    },
+    "kino-b": {
+      "kino-a": {
+        "minutes": 20,
+        "distance_meters": 14000,
+        "no_traffic_minutes": 17,
+        "historic_traffic_minutes": 20,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      },
+      "kino-c": {
+        "minutes": 15,
+        "distance_meters": 10500,
+        "no_traffic_minutes": 12,
+        "historic_traffic_minutes": 15,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      },
+      "dom": {
+        "minutes": 25,
+        "distance_meters": 17500,
+        "no_traffic_minutes": 22,
+        "historic_traffic_minutes": 25,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      }
+    },
+    "kino-c": {
+      "kino-a": {
+        "minutes": 35,
+        "distance_meters": 24500,
+        "no_traffic_minutes": 32,
+        "historic_traffic_minutes": 35,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      },
+      "kino-b": {
+        "minutes": 15,
+        "distance_meters": 10500,
+        "no_traffic_minutes": 12,
+        "historic_traffic_minutes": 15,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      },
+      "dom": {
+        "minutes": 30,
+        "distance_meters": 21000,
+        "no_traffic_minutes": 27,
+        "historic_traffic_minutes": 30,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      }
+    },
+    "dom": {
+      "kino-a": {
+        "minutes": 20,
+        "distance_meters": 14000,
+        "no_traffic_minutes": 17,
+        "historic_traffic_minutes": 20,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      },
+      "kino-b": {
+        "minutes": 25,
+        "distance_meters": 17500,
+        "no_traffic_minutes": 22,
+        "historic_traffic_minutes": 25,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      },
+      "kino-c": {
+        "minutes": 30,
+        "distance_meters": 21000,
+        "no_traffic_minutes": 27,
+        "historic_traffic_minutes": 30,
+        "live_traffic_minutes": null,
+        "traffic_delay_minutes": 3,
+        "raw": {
+          "source": "sample"
+        }
+      }
+    }
+  },
+  "profile_times": {
+    "morning": {
+      "kino-a": {
+        "kino-b": {
+          "minutes": 23,
+          "distance_meters": 16100,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 23,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 6,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 40,
+          "distance_meters": 28000,
+          "no_traffic_minutes": 32,
+          "historic_traffic_minutes": 40,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 8,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 23,
+          "distance_meters": 16100,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 23,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 6,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "kino-b": {
+        "kino-a": {
+          "minutes": 23,
+          "distance_meters": 16100,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 23,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 6,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 17,
+          "distance_meters": 11900,
+          "no_traffic_minutes": 12,
+          "historic_traffic_minutes": 17,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 5,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 29,
+          "distance_meters": 20300,
+          "no_traffic_minutes": 22,
+          "historic_traffic_minutes": 29,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 7,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "kino-c": {
+        "kino-a": {
+          "minutes": 40,
+          "distance_meters": 28000,
+          "no_traffic_minutes": 32,
+          "historic_traffic_minutes": 40,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 8,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-b": {
+          "minutes": 17,
+          "distance_meters": 11900,
+          "no_traffic_minutes": 12,
+          "historic_traffic_minutes": 17,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 5,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 34,
+          "distance_meters": 23800,
+          "no_traffic_minutes": 27,
+          "historic_traffic_minutes": 34,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 7,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "dom": {
+        "kino-a": {
+          "minutes": 23,
+          "distance_meters": 16100,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 23,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 6,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-b": {
+          "minutes": 29,
+          "distance_meters": 20300,
+          "no_traffic_minutes": 22,
+          "historic_traffic_minutes": 29,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 7,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 34,
+          "distance_meters": 23800,
+          "no_traffic_minutes": 27,
+          "historic_traffic_minutes": 34,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 7,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      }
+    },
+    "midday": {
+      "kino-a": {
+        "kino-b": {
+          "minutes": 20,
+          "distance_meters": 14000,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 20,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 35,
+          "distance_meters": 24500,
+          "no_traffic_minutes": 32,
+          "historic_traffic_minutes": 35,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 20,
+          "distance_meters": 14000,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 20,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "kino-b": {
+        "kino-a": {
+          "minutes": 20,
+          "distance_meters": 14000,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 20,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 15,
+          "distance_meters": 10500,
+          "no_traffic_minutes": 12,
+          "historic_traffic_minutes": 15,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 25,
+          "distance_meters": 17500,
+          "no_traffic_minutes": 22,
+          "historic_traffic_minutes": 25,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "kino-c": {
+        "kino-a": {
+          "minutes": 35,
+          "distance_meters": 24500,
+          "no_traffic_minutes": 32,
+          "historic_traffic_minutes": 35,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-b": {
+          "minutes": 15,
+          "distance_meters": 10500,
+          "no_traffic_minutes": 12,
+          "historic_traffic_minutes": 15,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 30,
+          "distance_meters": 21000,
+          "no_traffic_minutes": 27,
+          "historic_traffic_minutes": 30,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "dom": {
+        "kino-a": {
+          "minutes": 20,
+          "distance_meters": 14000,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 20,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-b": {
+          "minutes": 25,
+          "distance_meters": 17500,
+          "no_traffic_minutes": 22,
+          "historic_traffic_minutes": 25,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 30,
+          "distance_meters": 21000,
+          "no_traffic_minutes": 27,
+          "historic_traffic_minutes": 30,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 3,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      }
+    },
+    "afternoon": {
+      "kino-a": {
+        "kino-b": {
+          "minutes": 27,
+          "distance_meters": 18900,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 27,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 10,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 47,
+          "distance_meters": 32900,
+          "no_traffic_minutes": 32,
+          "historic_traffic_minutes": 47,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 15,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 27,
+          "distance_meters": 18900,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 27,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 10,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "kino-b": {
+        "kino-a": {
+          "minutes": 27,
+          "distance_meters": 18900,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 27,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 10,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 20,
+          "distance_meters": 14000,
+          "no_traffic_minutes": 12,
+          "historic_traffic_minutes": 20,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 8,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 34,
+          "distance_meters": 23800,
+          "no_traffic_minutes": 22,
+          "historic_traffic_minutes": 34,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 12,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "kino-c": {
+        "kino-a": {
+          "minutes": 47,
+          "distance_meters": 32900,
+          "no_traffic_minutes": 32,
+          "historic_traffic_minutes": 47,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 15,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-b": {
+          "minutes": 20,
+          "distance_meters": 14000,
+          "no_traffic_minutes": 12,
+          "historic_traffic_minutes": 20,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 8,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 40,
+          "distance_meters": 28000,
+          "no_traffic_minutes": 27,
+          "historic_traffic_minutes": 40,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 13,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "dom": {
+        "kino-a": {
+          "minutes": 27,
+          "distance_meters": 18900,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 27,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 10,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-b": {
+          "minutes": 34,
+          "distance_meters": 23800,
+          "no_traffic_minutes": 22,
+          "historic_traffic_minutes": 34,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 12,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 40,
+          "distance_meters": 28000,
+          "no_traffic_minutes": 27,
+          "historic_traffic_minutes": 40,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 13,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      }
+    },
+    "evening": {
+      "kino-a": {
+        "kino-b": {
+          "minutes": 24,
+          "distance_meters": 16800,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 24,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 7,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 42,
+          "distance_meters": 29400,
+          "no_traffic_minutes": 32,
+          "historic_traffic_minutes": 42,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 10,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 24,
+          "distance_meters": 16800,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 24,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 7,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "kino-b": {
+        "kino-a": {
+          "minutes": 24,
+          "distance_meters": 16800,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 24,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 7,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 18,
+          "distance_meters": 12600,
+          "no_traffic_minutes": 12,
+          "historic_traffic_minutes": 18,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 6,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 30,
+          "distance_meters": 21000,
+          "no_traffic_minutes": 22,
+          "historic_traffic_minutes": 30,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 8,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "kino-c": {
+        "kino-a": {
+          "minutes": 42,
+          "distance_meters": 29400,
+          "no_traffic_minutes": 32,
+          "historic_traffic_minutes": 42,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 10,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-b": {
+          "minutes": 18,
+          "distance_meters": 12600,
+          "no_traffic_minutes": 12,
+          "historic_traffic_minutes": 18,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 6,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 36,
+          "distance_meters": 25200,
+          "no_traffic_minutes": 27,
+          "historic_traffic_minutes": 36,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 9,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "dom": {
+        "kino-a": {
+          "minutes": 24,
+          "distance_meters": 16800,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 24,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 7,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-b": {
+          "minutes": 30,
+          "distance_meters": 21000,
+          "no_traffic_minutes": 22,
+          "historic_traffic_minutes": 30,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 8,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 36,
+          "distance_meters": 25200,
+          "no_traffic_minutes": 27,
+          "historic_traffic_minutes": 36,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 9,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      }
+    },
+    "night": {
+      "kino-a": {
+        "kino-b": {
+          "minutes": 17,
+          "distance_meters": 11900,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 17,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 0,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 30,
+          "distance_meters": 21000,
+          "no_traffic_minutes": 32,
+          "historic_traffic_minutes": 30,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 0,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 17,
+          "distance_meters": 11900,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 17,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 0,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "kino-b": {
+        "kino-a": {
+          "minutes": 17,
+          "distance_meters": 11900,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 17,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 0,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 13,
+          "distance_meters": 9100,
+          "no_traffic_minutes": 12,
+          "historic_traffic_minutes": 13,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 1,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 21,
+          "distance_meters": 14700,
+          "no_traffic_minutes": 22,
+          "historic_traffic_minutes": 21,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 0,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "kino-c": {
+        "kino-a": {
+          "minutes": 30,
+          "distance_meters": 21000,
+          "no_traffic_minutes": 32,
+          "historic_traffic_minutes": 30,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 0,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-b": {
+          "minutes": 13,
+          "distance_meters": 9100,
+          "no_traffic_minutes": 12,
+          "historic_traffic_minutes": 13,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 1,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "dom": {
+          "minutes": 26,
+          "distance_meters": 18200,
+          "no_traffic_minutes": 27,
+          "historic_traffic_minutes": 26,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 0,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      },
+      "dom": {
+        "kino-a": {
+          "minutes": 17,
+          "distance_meters": 11900,
+          "no_traffic_minutes": 17,
+          "historic_traffic_minutes": 17,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 0,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-b": {
+          "minutes": 21,
+          "distance_meters": 14700,
+          "no_traffic_minutes": 22,
+          "historic_traffic_minutes": 21,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 0,
+          "raw": {
+            "source": "sample"
+          }
+        },
+        "kino-c": {
+          "minutes": 26,
+          "distance_meters": 18200,
+          "no_traffic_minutes": 27,
+          "historic_traffic_minutes": 26,
+          "live_traffic_minutes": null,
+          "traffic_delay_minutes": 0,
+          "raw": {
+            "source": "sample"
+          }
+        }
+      }
+    }
+  }
+}
