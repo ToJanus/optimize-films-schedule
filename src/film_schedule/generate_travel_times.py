@@ -38,7 +38,7 @@ def main() -> None:
     _configure_logging(args.verbose)
     LOGGER.info("Loading schedule input from %s", args.input)
     data = json.loads(args.input.read_text(encoding="utf-8"))
-    *_unused, _settings, locations = load_plan(data, args.input.parent)
+    *_unused, _settings, locations = load_plan(_without_existing_travel_times(data), args.input.parent)
     profiles = _parse_profiles(args.profile)
     _validate_coordinates(locations)
     args.cache_dir.mkdir(parents=True, exist_ok=True)
@@ -80,6 +80,19 @@ def main() -> None:
     LOGGER.info(
         "Wrote %d base routes and %d profiled routes to %s", route_count, route_count * len(profiles), args.output
     )
+
+
+def _without_existing_travel_times(data: dict[str, Any]) -> dict[str, Any]:
+    """Return schedule input suitable for location loading while generating a new travel file.
+
+    The generator only needs cinemas/places from the schedule. Existing travel-time
+    configuration in that schedule may point at a file that does not exist yet (for
+    example the file this command is about to create), so loading it here would make
+    generation fail before any routes are produced.
+    """
+    if "travel_times_file" not in data and "travel_times" not in data:
+        return data
+    return {key: value for key, value in data.items() if key not in {"travel_times_file", "travel_times"}}
 
 
 def _configure_logging(verbose: bool) -> None:
