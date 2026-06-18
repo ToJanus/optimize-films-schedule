@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
-from film_schedule.generate_travel_times import _fetch_or_static
+from film_schedule.generate_travel_times import _fetch_or_static, main
 from film_schedule.optimizer import Location
 
 
@@ -81,3 +81,42 @@ def test_static_cache_is_reused_for_static_provider(monkeypatch, tmp_path) -> No
     entry = _fetch_or_static(_args(tmp_path, "static"), _location("a", 1.0, 2.0), _location("b", 3.0, 4.0), None)
 
     assert entry == {"minutes": 20, "raw": {"provider": "static"}}
+
+
+def test_main_ignores_existing_travel_times_file_while_generating_static(monkeypatch, tmp_path) -> None:
+    input_path = tmp_path / "schedule.json"
+    output_path = tmp_path / "generated_travel_times.json"
+    input_path.write_text(
+        json.dumps(
+            {
+                "priorities": {"must": 100},
+                "cinemas": [
+                    {"id": "a", "name": "Kino A", "lat": 52.1, "lon": 21.0},
+                    {"id": "b", "name": "Kino B", "lat": 52.2, "lon": 21.1},
+                ],
+                "films": [],
+                "screenings": [],
+                "travel_times_file": "sample_travel_times.json",
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "generate_travel_times.py",
+            str(input_path),
+            str(output_path),
+            "--provider",
+            "static",
+            "--static-minutes",
+            "17",
+        ],
+    )
+
+    main()
+
+    generated = json.loads(output_path.read_text(encoding="utf-8"))
+    assert generated["times"]["a"]["b"]["minutes"] == 17
+    assert generated["times"]["b"]["a"]["minutes"] == 17
