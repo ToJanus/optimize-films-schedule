@@ -69,7 +69,7 @@ Tryb TomTom:
 TOMTOM_API_KEY=... python -m film_schedule.generate_travel_times examples/sample_day.json examples/generated_travel_times.json --provider tomtom
 ```
 
-Skrypt zapisuje wynikowy plik `travel_times` oraz historyczny cache pojedynczych relacji w katalogu `.travel_cache` (albo w katalogu wskazanym przez `--cache-dir`). Cache pozwala ponownie wykorzystać wcześniej pobrane trasy i nie zużywać niepotrzebnie limitu API.
+Skrypt zapisuje wynikowy plik `travel_times` oraz historyczny cache pojedynczych relacji w katalogu `.travel_cache` (albo w katalogu wskazanym przez `--cache-dir`). Cache pozwala ponownie wykorzystać wcześniej pobrane trasy i nie zużywać niepotrzebnie limitu API. Wpisy cache są oznaczane providerem; jeśli uruchomisz skrypt z innym providerem niż zapisany w cache, stary wpis zostanie pominięty i przeliczony ponownie.
 
 Domyślnie generowane są profile:
 
