@@ -17,10 +17,31 @@ from .optimizer import (
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Optimize one-day cinema movie schedules.")
-    parser.add_argument("input", type=Path, help="Path to a JSON input file with films, cinemas and screenings.")
-    parser.add_argument("--format", choices=("text", "json"), default="text", help="Output format.")
-    parser.add_argument("--limit", type=int, default=20, help="Maximum number of options to print. Use 0 for all.")
+    parser = argparse.ArgumentParser(
+        description="Optimize one-day cinema movie schedules."
+    )
+    parser.add_argument(
+        "input",
+        type=Path,
+        help="Path to a JSON input file with films, cinemas and screenings.",
+    )
+    parser.add_argument(
+        "--format",
+        choices=("text", "json"),
+        default="text",
+        help="Console or aggregate output format.",
+    )
+    parser.add_argument(
+        "--records-format",
+        choices=("text", "json"),
+        help="Format for individual schedule files written with --output. Defaults to --format.",
+    )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=20,
+        help="Maximum number of options to print. Use 0 for all.",
+    )
     parser.add_argument(
         "--all-films",
         action="store_true",
@@ -37,6 +58,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="Latest movie end time in HH:MM format.",
     )
     parser.add_argument(
+        "--time-bounds-apply-to-locations",
+        action="store_true",
+        help=(
+            "Treat --earliest-start as departure from start_location_id and --latest-end as arrival "
+            "at end_location_id instead of movie start/end times."
+        ),
+    )
+    parser.add_argument(
         "--travel-times",
         type=Path,
         help="Override or provide an external travel_times JSON file.",
@@ -45,6 +74,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--sort-by-risk",
         action="store_true",
         help="Prefer lower-risk schedules after requirements, score and film count.",
+    )
+    parser.add_argument(
+        "--use-cinema-priorities",
+        action="store_true",
+        help="Add numeric cinema priorities to schedule score. Disabled by default.",
     )
     parser.add_argument(
         "--validate-routes",
@@ -78,7 +112,18 @@ def main() -> None:
         data["travel_times_file"] = str(args.travel_times)
     if args.sort_by_risk:
         data.setdefault("optimization_settings", {})["sort_by_risk"] = True
-    films, cinemas, screenings, priority_weights, travel_times, constraints, settings, _locations = load_plan(data, args.input.parent)
+    if args.use_cinema_priorities:
+        data.setdefault("optimization_settings", {})["use_cinema_priorities"] = True
+    (
+        films,
+        cinemas,
+        screenings,
+        priority_weights,
+        travel_times,
+        constraints,
+        settings,
+        _locations,
+    ) = load_plan(data, args.input.parent)
     options = optimize_schedule(
         films,
         cinemas,
@@ -89,21 +134,38 @@ def main() -> None:
         require_all_films=args.all_films,
         earliest_start=args.earliest_start,
         latest_end=args.latest_end,
+        time_bounds_apply_to_locations=args.time_bounds_apply_to_locations,
         optimization_settings=settings,
     )
     selected = options if args.limit == 0 else options[: args.limit]
 
     if args.validate_routes:
-        print(json.dumps(_route_validation_payload(selected[: args.validate_routes]), ensure_ascii=False, indent=2))
+        print(
+            json.dumps(
+                _route_validation_payload(selected[: args.validate_routes]),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
         return
 
     if args.output:
-        records_dir = save_options(selected, args.output, args.format)
-        print(f"Zapisano {len(selected)} terminarzy do {args.output} oraz do katalogu {records_dir}.")
+        records_dir = save_options(
+            selected, args.output, args.format, args.records_format or args.format
+        )
+        print(
+            f"Zapisano {len(selected)} terminarzy do {args.output} oraz do katalogu {records_dir}."
+        )
         return
 
     if args.format == "json":
-        print(json.dumps([option_to_dict(option) for option in selected], ensure_ascii=False, indent=2))
+        print(
+            json.dumps(
+                [option_to_dict(option) for option in selected],
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
         return
 
     if not selected:
@@ -114,7 +176,9 @@ def main() -> None:
         print(option_to_text(option, ordinal))
 
 
-def _route_validation_payload(options: Sequence[ScheduleOption]) -> list[dict[str, object]]:
+def _route_validation_payload(
+    options: Sequence[ScheduleOption],
+) -> list[dict[str, object]]:
     return [
         {
             "option": ordinal,
@@ -126,35 +190,60 @@ def _route_validation_payload(options: Sequence[ScheduleOption]) -> list[dict[st
     ]
 
 
-def save_options(options: Sequence[ScheduleOption], output_path: Path, output_format: str) -> Path:
+def save_options(
+    options: Sequence[ScheduleOption],
+    output_path: Path,
+    output_format: str,
+    records_format: str | None = None,
+) -> Path:
     """Save an aggregate file and one file per schedule option."""
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     records_dir = output_path.with_name(f"{output_path.stem}_records")
     records_dir.mkdir(parents=True, exist_ok=True)
+    records_format = records_format or output_format
 
     if output_format == "json":
         output_path.write_text(
-            json.dumps([option_to_dict(option) for option in options], ensure_ascii=False, indent=2),
+            json.dumps(
+                [option_to_dict(option) for option in options],
+                ensure_ascii=False,
+                indent=2,
+            ),
             encoding="utf-8",
         )
-        for ordinal, option in enumerate(options, start=1):
-            record_path = records_dir / f"{ordinal:03d}_{_slugify_option(option, ordinal)}.json"
+        _write_records(options, records_dir, records_format)
+        return records_dir
+
+    if options:
+        text = "\n\n".join(
+            option_to_text(option, ordinal)
+            for ordinal, option in enumerate(options, start=1)
+        )
+    else:
+        text = "Brak możliwych terminarzy dla podanych ograniczeń."
+    output_path.write_text(f"{text}\n", encoding="utf-8")
+    _write_records(options, records_dir, records_format)
+    return records_dir
+
+
+def _write_records(
+    options: Sequence[ScheduleOption], records_dir: Path, records_format: str
+) -> None:
+    for ordinal, option in enumerate(options, start=1):
+        suffix = "json" if records_format == "json" else "txt"
+        record_path = (
+            records_dir / f"{ordinal:03d}_{_slugify_option(option, ordinal)}.{suffix}"
+        )
+        if records_format == "json":
             record_path.write_text(
                 json.dumps(option_to_dict(option), ensure_ascii=False, indent=2),
                 encoding="utf-8",
             )
-        return records_dir
-
-    if options:
-        text = "\n\n".join(option_to_text(option, ordinal) for ordinal, option in enumerate(options, start=1))
-    else:
-        text = "Brak możliwych terminarzy dla podanych ograniczeń."
-    output_path.write_text(f"{text}\n", encoding="utf-8")
-    for ordinal, option in enumerate(options, start=1):
-        record_path = records_dir / f"{ordinal:03d}_{_slugify_option(option, ordinal)}.txt"
-        record_path.write_text(f"{option_to_text(option, ordinal)}\n", encoding="utf-8")
-    return records_dir
+        else:
+            record_path.write_text(
+                f"{option_to_text(option, ordinal)}\n", encoding="utf-8"
+            )
 
 
 def _parse_clock_argument(value: str) -> int:

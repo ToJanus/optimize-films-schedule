@@ -10,10 +10,10 @@ Najważniejsze sekcje:
 
 - `priorities` — dowolna liczba kategorii ważności. Im większa liczba, tym mocniej dany film wpływa na sortowanie wyników.
 - `films` — lista filmów z czasem trwania i przypisaną kategorią ważności.
-- `cinemas` — lista kin; `ads_minutes` określa reklamowy bufor na początku seansu, a `address`, `lat` i `lon` opisują routowalną lokalizację kina.
+- `cinemas` — lista kin; `ads_minutes` określa reklamowy bufor na początku seansu, `address`, `lat` i `lon` opisują routowalną lokalizację kina, a liczbowe `priority` (domyślnie `1`) może opcjonalnie wpływać na wynik optymalizacji.
 - `places` — opcjonalna lista dodatkowych miejsc (np. dom, hotel, dworzec) z `id`, nazwą, `address`, `lat` i `lon`. Takie miejsce może być początkiem albo końcem dnia.
 - `screenings` — lista seansów z godziną z repertuaru (`starts_at`). Opcjonalne `margin_before_minutes` i `margin_after_minutes` nadpisują domyślne marginesy dla konkretnego seansu.
-- `constraints` — opcjonalne ograniczenia: `required_films`, `required_film_cinemas`, `start_location_id`, `end_location_id`.
+- `constraints` — opcjonalne ograniczenia: `required_films`, `required_film_cinemas`, `start_location_id`, `end_location_id` oraz `breaks`. Przerwy mogą być tekstem `"HH:MM;HH:MM"` albo obiektem `{"from": "HH:MM", "to": "HH:MM", "location_id": "..."}`. Bez miejsca zakres blokuje filmy i przesuwa możliwy wyjazd do kolejnego kina na godzinę `to`; z miejscem optimizer sprawdza, czy da się dotrzeć do miejsca najpóźniej na `from`, pozostać tam co najmniej do `to`, a potem dojechać na kolejny film.
 - `travel_times_file` — ścieżka do osobnego pliku JSON z bazową macierzą czasów przejazdu. Ścieżka relatywna jest liczona względem pliku wejściowego.
 - `optimization_settings` — opcjonalne ustawienia, m.in. `sort_by_risk`, wymuszony `travel_time_profile` oraz progi ostrzeżeń ryzyka.
 
@@ -167,3 +167,13 @@ Wyniki są sortowane kolejno po:
 5. najmniejszym łącznym czasie dojazdów,
 6. najmniejszym łącznym czasie czekania,
 7. wcześniejszej godzinie rozpoczęcia planu.
+
+Filmy wczytywane z bazy filmów są porządkowane najpierw malejąco po wadze priorytetu z `priorities`, a następnie alfabetycznie po tytule. Priorytety kin są zwykłymi liczbami w rekordach `cinemas`; domyślnie nie są doliczane do `score`. Aby je włączyć, ustaw `optimization_settings.use_cinema_priorities: true` albo dodaj flagę `--use-cinema-priorities`.
+
+Flagi `--earliest-start` i `--latest-end` standardowo oznaczają start i koniec filmu. Jeśli dodasz `--time-bounds-apply-to-locations`, `--earliest-start` oznacza godzinę wyjazdu ze `start_location_id`, a `--latest-end` godzinę przyjazdu do `end_location_id`.
+
+Przy zapisie do pliku można rozdzielić format wyniku zbiorczego i pojedynczych tras. Przykład: zbiorczy plik tekstowy i pojedyncze terminarze jako JSON:
+
+```bash
+python -m film_schedule.cli examples/sample_day.json --output results/day.txt --format text --records-format json
+```
