@@ -15,7 +15,8 @@
       "ads_minutes": 15,
       "address": "ul. Kinowa 1, Warszawa",
       "lat": 52.2297,
-      "lon": 21.0122
+      "lon": 21.0122,
+      "priority": 1
     },
     {
       "id": "kino-b",
@@ -23,7 +24,8 @@
       "ads_minutes": 20,
       "address": "ul. Filmowa 2, Warszawa",
       "lat": 52.24,
-      "lon": 21.02
+      "lon": 21.02,
+      "priority": 1
     },
     {
       "id": "kino-c",
@@ -31,7 +33,8 @@
       "ads_minutes": 10,
       "address": "ul. Popcornowa 3, Warszawa",
       "lat": 52.22,
-      "lon": 21.0
+      "lon": 21.0,
+      "priority": 1
     }
   ],
   "films": [

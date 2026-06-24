@@ -17,8 +17,25 @@ def test_save_options_writes_aggregate_and_each_option_file(tmp_path) -> None:
             {"id": "s2", "film_id": "f2", "cinema_id": "a", "starts_at": "12:00"},
         ],
     }
-    films, cinemas, screenings, priorities, travel_times, constraints, settings, locations = load_plan(data)
-    options = optimize_schedule(films, cinemas, screenings, priorities, travel_times, constraints, optimization_settings=settings)[:2]
+    (
+        films,
+        cinemas,
+        screenings,
+        priorities,
+        travel_times,
+        constraints,
+        settings,
+        locations,
+    ) = load_plan(data)
+    options = optimize_schedule(
+        films,
+        cinemas,
+        screenings,
+        priorities,
+        travel_times,
+        constraints,
+        optimization_settings=settings,
+    )[:2]
 
     output_path = tmp_path / "results.json"
     records_dir = save_options(options, output_path, "json")
@@ -27,4 +44,47 @@ def test_save_options_writes_aggregate_and_each_option_file(tmp_path) -> None:
     record_paths = sorted(records_dir.glob("*.json"))
     assert len(aggregate) == len(options)
     assert len(record_paths) == len(options)
-    assert json.loads(record_paths[0].read_text(encoding="utf-8"))["score"] == options[0].score
+    assert (
+        json.loads(record_paths[0].read_text(encoding="utf-8"))["score"]
+        == options[0].score
+    )
+
+
+def test_save_options_can_write_text_aggregate_and_json_records(tmp_path) -> None:
+    data = {
+        "priorities": {"must": 100},
+        "cinemas": [{"id": "a", "name": "Kino A"}],
+        "films": [
+            {"id": "f1", "title": "Film 1", "duration_minutes": 60, "priority": "must"}
+        ],
+        "screenings": [
+            {"id": "s1", "film_id": "f1", "cinema_id": "a", "starts_at": "10:00"}
+        ],
+    }
+    (
+        films,
+        cinemas,
+        screenings,
+        priorities,
+        travel_times,
+        constraints,
+        settings,
+        locations,
+    ) = load_plan(data)
+    options = optimize_schedule(
+        films,
+        cinemas,
+        screenings,
+        priorities,
+        travel_times,
+        constraints,
+        optimization_settings=settings,
+    )
+
+    output_path = tmp_path / "results.txt"
+    records_dir = save_options(options, output_path, "text", "json")
+
+    assert output_path.read_text(encoding="utf-8").startswith("1. score=100")
+    record_paths = sorted(records_dir.glob("*.json"))
+    assert len(record_paths) == 1
+    assert json.loads(record_paths[0].read_text(encoding="utf-8"))["score"] == 100

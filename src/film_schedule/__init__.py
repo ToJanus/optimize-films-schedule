@@ -1,6 +1,7 @@
 """Movie schedule optimizer."""
 
 from .optimizer import (
+    BreakWindow,
     CinemaPlan,
     Film,
     Location,
@@ -12,6 +13,7 @@ from .optimizer import (
 )
 
 __all__ = [
+    "BreakWindow",
     "CinemaPlan",
     "Film",
     "Location",
